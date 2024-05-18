@@ -1,0 +1,18 @@
+
+export const routes =[
+    {
+        name:'home',
+        path:'',
+        view:'pages/Home',
+    },
+    {
+        name:'user',
+        path:'/user',
+        view:'pages/UserProfile'
+    },
+    {
+        name: 'sign-in',
+        path: '/sign-in',
+        view: 'pages/Login'
+    }
+]
