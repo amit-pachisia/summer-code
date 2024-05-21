@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 
 function Home() {
 return(
-    <div>
-        This is home page
-    </div>
+    <h1 className="text-3xl font-bold underline">
+      This is home page
+    </h1>
 )
 }
 
