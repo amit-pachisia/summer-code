@@ -14,5 +14,10 @@ export const routes =[
         name: 'sign-in',
         path: '/sign-in',
         view: 'pages/Login'
+    },
+    {
+        name: 'SplashScreen',
+        path: '/splash-screen',
+        view: 'pages/SplashScreen'
     }
 ]
