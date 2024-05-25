@@ -3,18 +3,18 @@ import { LoginForm } from "./components/LoginForm";
 
 function Login() {
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-      <div className="space-y-5 grid place-content-center">
+    <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="flex h-screen flex-col items-center justify-center space-y-5">
         <Header
           title="Welcome Back!"
           subTitle="Log in or Create account to get back to your dashboard!"
         />
-        <div className="w-full flex items-center justify-center">
-          <LoginForm />
-        </div>
+        <LoginForm />
       </div>
-      <div className="hidden lg:flex bg-violet-500 h-full">
-        <span>Logo</span>
+      <div className="hidden h-full items-center justify-center bg-violet-500 lg:flex">
+        <div className="flex size-16 items-center justify-center rounded-full border border-zinc-300/25 bg-white">
+          Logo
+        </div>
       </div>
     </div>
   );
