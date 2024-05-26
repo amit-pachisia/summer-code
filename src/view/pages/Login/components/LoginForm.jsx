@@ -45,12 +45,24 @@ export const LoginForm = () => {
 
   return (
     <div className="w-[330px] space-y-5 rounded-xl border p-5 shadow-xl lg:w-[400px]">
-      <div className="space-y-3">
+      <div className="space-y-7">
         <LoginFormHeader
           title="Sign in to Referral"
           subTitle="Welcome back! Please sign in to continue"
         />
+        <button className="flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm font-medium text-zinc-500 transition-all hover:bg-zinc-300/15 active:scale-95">
+          <img
+            src="https://api.iconify.design/logos:google-icon.svg"
+            alt="google icon"
+          />
+          <span>Continue with Google</span>
+        </button>
       </div>
+
+      <p className="relative flex items-center justify-center text-zinc-500 before:absolute before:left-0 before:h-[1px] before:w-5/12 before:bg-zinc-200/70 before:content-[''] after:absolute after:right-0 after:h-[1px] after:w-5/12 after:bg-zinc-200/70 after:content-['']">
+        or
+      </p>
+
       <form onSubmit={handleOnSubmit}>
         <main className="w-full space-y-5">
           <div className="space-y-3">
@@ -73,7 +85,7 @@ export const LoginForm = () => {
           </div>
           <button
             type="submit"
-            className="h-10 w-full rounded-md border bg-zinc-800 text-white"
+            className="h-10 w-full rounded-md border bg-zinc-800 text-sm font-medium text-white transition-all hover:bg-zinc-800/95 active:scale-95"
           >
             Continue
           </button>
