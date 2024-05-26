@@ -3,14 +3,17 @@ import { Input } from "./Input";
 import { LoginFormHeader } from "./LoginFormHeader";
 import { useState } from "react";
 import { loginSchema } from "../../../../schema";
+import { twMerge } from "tailwind-merge";
 
 export const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formValues, setFormValues] = useState({
     email: { value: "", error: false, message: "" },
     password: { value: "", error: false, message: "" },
   });
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     const { email, password } = formValues;
@@ -18,12 +21,20 @@ export const LoginForm = () => {
     if (!email.value || !password.value) return;
 
     try {
+      setIsLoading(true);
       loginSchema.parse({ email: email.value });
 
       setFormValues((prev) => ({
         ...prev,
         email: { ...prev.email, error: false, message: "" },
       }));
+
+      // backend call here fake delay
+      const res = await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve("got the data");
+        }, 3000);
+      });
 
       setFormValues({
         email: { value: "", error: false, message: "" },
@@ -40,6 +51,8 @@ export const LoginForm = () => {
           message: errorMessage[0].message,
         },
       }));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,9 +98,21 @@ export const LoginForm = () => {
           </div>
           <button
             type="submit"
-            className="h-10 w-full rounded-md border bg-zinc-800 text-sm font-medium text-white transition-all hover:bg-zinc-800/95 active:scale-95"
+            disabled={isLoading}
+            className={twMerge(
+              "flex h-10 w-full items-center justify-center space-x-3 rounded-md border bg-zinc-800 text-sm font-medium text-white transition-all hover:bg-zinc-800/95 disabled:cursor-not-allowed",
+              !isLoading && "active:scale-95",
+              isLoading && "bg-zinc-600 hover:bg-zinc-600",
+            )}
           >
-            Continue
+            {isLoading && (
+              <img
+                className="animate-spin text-white transition"
+                src="https://api.iconify.design/lucide:loader-circle.svg"
+                alt="loader"
+              />
+            )}
+            <span>Continue</span>
           </button>
         </main>
       </form>
