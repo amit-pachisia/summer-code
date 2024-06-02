@@ -2,10 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { user } from './mockData';
+import { AddWorkHistory } from './components/AddWorkHistory';
+import { EditExperience } from './components/EditExperienceForm';
+import { EditEducation } from './components/EditEducationForm';
+import { Dialog } from '../../common/components/Dialog';
+import { AddEducation } from './components/AddEducation';
+
 
 function UserProfile() {
   const [userData, setUserData] = useState({});
-
+  const [addExpDialog, setAddExpDialog] = useState(false);
+  const [addEduDialog, setAddEduDialog] = useState(false);
+  const [editingExperience, setEditingExperience] = useState({});
+  const [editingEducation, setEditingEducation] = useState({});
+  
   const fetchData = () => {
     axios.get(`https://jsonplaceholder.typicode.com/users`)
       .then(res => {
@@ -17,8 +27,32 @@ function UserProfile() {
     fetchData();
   }, [])
 
+  const handleAddExpClick = () => {
+    setAddExpDialog(true);
+  }
+
+  const handleAddEduClick = () => {
+    setAddEduDialog(true);
+  }
+
+  const handleCloseExpDialog = () => {
+    setAddExpDialog(false);
+  }
+
+  const handleCloseEduDialog = () => {
+    setAddEduDialog(false);
+  }
+
+  const handleEditExperience= (experience) => {
+    setEditingExperience(experience);
+  };
+
+  const handleEditEducation= (education) => {
+    setEditingEducation(education);
+  };
+
   return (
-    <div class="grid gap-4 col-span-7 px-3">
+    <><div class="grid gap-4 col-span-7 px-3">
 
       <div class="md:col-start-1 md:col-end-2 pt-10">
         <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 px-2 pt-2">
@@ -47,18 +81,34 @@ function UserProfile() {
         </div>
       </div>
 
-      <div class="md:col-start-2 md:col-end-5  pt-10">
+      <div class="md:col-start-2 md:col-end-5  md:pt-10 pt-3">
         <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
           <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white">Professional Summary</h6>
           <p class="mb-5 text-xs text-gray-500 sm:text-lg dark:text-gray-400">{userData?.summary}</p>
 
         </div>
 
-        <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white pt-5">Work History</h6>
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="flow-root ">
+          <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white pt-5 float-left">Work History</h6>
+          <button class="hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center float-right" onClick={handleAddExpClick}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button>
+        </div>
+        <div class="grid gap-4">
           {userData?.experience?.map((experience) => {
             return (
               <div class="grid mb-8 py-2 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 bg-white dark:bg-gray-800">
+                {Object.keys(editingExperience).length === 0 && (
+                <div>
+                  <button class="hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center float-right" onClick={() => handleEditExperience(experience)}>
+
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                </svg>
+                </button>
+               
                 <div class="flex-1 min-w-0 ms-4">
                   <p class="text-xs font-medium text-gray-500 truncate dark:text-gray-400">
                     Job Title
@@ -86,19 +136,38 @@ function UserProfile() {
                     {experience?.description}
                   </p>
                 </div>
-              </div>)
+                </div>)}
+                {Object.keys(editingExperience).length > 0 && (
+                <EditExperience experience={editingExperience}/>
+              )}
+              </div>);
           })}
         </div>
-        <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white">Education</h6>
+        <div class="flow-root ">
+          <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white pt-5 float-left">Education</h6>
+          <button class="hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center float-right" onClick={handleAddEduClick}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+
+
+          </button>
+        </div>
         <div class="grid md:grid-cols-2 gap-4">
-          {userData?.education?.map((education) => {
+          {userData?.education?.map((educationData) => {
             return (<div class="grid py-2 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 md:mb-12 bg-white dark:bg-gray-800">
+             {Object.keys(editingEducation).length ==0 && (<><div><button class="hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center float-right" onClick={() => handleEditEducation(educationData)}>
+
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+              </svg>
+              </button></div>
               <div class="flex-1 min-w-0 ms-4">
                 <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                   Degree
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  {education?.degree}
+                  {educationData?.degree}
                 </p>
               </div>
               <div class="flex-1 min-w-0 ms-4">
@@ -106,20 +175,22 @@ function UserProfile() {
                   Field Of Study
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  {education?.fieldOfStudy}
+                  {educationData?.fieldOfStudy}
                 </p>
                 <p class="text-xs italic text-gray-500 truncate dark:text-gray-400">
-                  {education?.startDate}-{education?.endDate ? education?.endDate : 'Present'}
+                  {educationData?.startDate}-{educationData?.endDate ? educationData?.endDate : 'Present'}
                 </p>
               </div>
               <div class="flex-1 min-w-0 ms-4">
 
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  {education?.school}
+                  {educationData?.school}
                 </p>
-              </div>
-
-            </div>)
+              </div></>)}
+              {Object.keys(editingEducation).length > 0 && (
+                <EditEducation education={editingEducation}/>
+              )}
+            </div>);
           })}
         </div>
 
@@ -139,7 +210,7 @@ function UserProfile() {
                     <span class="">{skill.name}</span>
                   </div>
 
-                </div>)
+                </div>);
               })}
 
             </div>
@@ -153,7 +224,7 @@ function UserProfile() {
                     <span class="">{language}</span>
                   </div>
 
-                </div>)
+                </div>);
               })}
             </div>
             <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white pt-5">Links</h6>
@@ -167,13 +238,26 @@ function UserProfile() {
                     {link.url}
                   </a></p>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
       </div>
 
     </div>
+        <Dialog 
+        title="Add Work Experience"
+        onClose={handleCloseExpDialog} 
+        open={addExpDialog}
+        children={<AddWorkHistory />}
+        />
+        <Dialog 
+        title="Add Education"
+        onClose={handleCloseEduDialog} 
+        open={addEduDialog}
+        children={<AddEducation />}
+        />
+        </>
   );
 }
 
