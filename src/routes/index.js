@@ -19,5 +19,10 @@ export const routes =[
         name: 'SplashScreen',
         path: '/splash-screen',
         view: 'pages/SplashScreen'
+    },
+    {
+        name: 'sign-up',
+        path: '/sign-up',
+        view: 'pages/SignUp'
     }
 ]
