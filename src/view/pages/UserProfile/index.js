@@ -87,7 +87,7 @@ function UserProfile() {
           <p class="mb-5 text-xs text-gray-500 sm:text-lg dark:text-gray-400">{userData?.summary}</p>
 
         </div>
-
+        {/* Work Exp */}
         <div class="flow-root ">
           <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white pt-5 float-left">Work History</h6>
           <button class="hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center float-right" onClick={handleAddExpClick}>
@@ -143,6 +143,7 @@ function UserProfile() {
               </div>);
           })}
         </div>
+        {/* Education Section */}
         <div class="flow-root ">
           <h6 class="mb-2 text-sm font-bold text-gray-900 dark:text-white pt-5 float-left">Education</h6>
           <button class="hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center float-right" onClick={handleAddEduClick}>
@@ -196,7 +197,7 @@ function UserProfile() {
 
 
       </div>
-
+      {/* Skills section */}
       <div class="md:col-start-5 md:col-end-7 pt-10">
         <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 px-2 pt-2">
 
