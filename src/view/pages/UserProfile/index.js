@@ -23,7 +23,10 @@ function UserProfile() {
   const [editingEducation, setEditingEducation] = useState({});
   const [editingEducationIndex, setEditingEducationIndex] = useState(null);
   const [editingLink, setEditingLink] = useState({});
+  const [isSkillEditMode, setIsSkillEditMode] = useState(false);
+  const [isLanguageEditMode, setIsLanguageEditMode] = useState(false);
   const [editingLinkIndex, setEditingLinkIndex] = useState(null);
+
 
   const fetchData = () => {
     axios.get(`https://jsonplaceholder.typicode.com/users`).then((res) => {
@@ -83,6 +86,15 @@ function UserProfile() {
     setEditingEducation(education);
     setEditingEducationIndex(index);
   };
+
+  const enableEditSkills = () => {
+    setIsSkillEditMode(!isSkillEditMode);
+  };
+
+  const enableEditLanguages = () => {
+    setIsLanguageEditMode(!isLanguageEditMode);
+  };
+
   const handleEditLink = (link, index) => {
     setEditingLink(link);
     setEditingLinkIndex(index);
@@ -102,6 +114,18 @@ function UserProfile() {
     setUserData({ ...userData, education: updatedEducation });
     setEditingEducation({});
     setEditingEducationIndex(null);
+  };
+
+  const handleSkillEdit = (index) => {
+    const newSkills = [...userData.skills];
+    newSkills.splice(index, 1);
+    setUserData({ ...userData, skills: newSkills });
+  };
+
+  const handleLanguageEdit = (index) => {
+    const newLanguages = [...userData.languages];
+    newLanguages.splice(index, 1);
+    setUserData({ ...userData, languages: newLanguages });
   };
 
   const updateLink = (index, newData) => {
@@ -164,7 +188,7 @@ function UserProfile() {
           </div>
           {/* Work Exp */}
           <div class="flow-root">
-            <h6 class="float-left mb-2 pt-5 text-sm font-bold text-gray-900 dark:text-white">
+            <h6 class="float-left mb-2 pt-5 text-sm font-bold text-gray-900 dark:text-black">
               Work History
             </h6>
             <button
@@ -266,7 +290,7 @@ function UserProfile() {
 
           {/* Education Section */}
           <div class="flow-root ">
-            <h6 class="float-left mb-2 pt-5 text-sm font-bold text-gray-900 dark:text-white">
+            <h6 class="float-left mb-2 pt-5 text-sm font-bold text-gray-900 dark:text-black">
               Education
             </h6>
             <button
@@ -363,28 +387,32 @@ function UserProfile() {
             </div>
           </div>
         </div>
-        {/* Skills section */}
+
         <div class="pt-10 md:col-start-5 md:col-end-7">
           <div class="w-full max-w-sm rounded-lg border border-gray-200 bg-white px-2 pt-2 shadow dark:border-gray-700 dark:bg-gray-800">
             <div class="items-left flex flex-col pb-10">
+              {/* Skills section */}
               <h6 className="text-sm font-bold text-gray-900 md:mb-2 dark:text-white">
                 Skills
                 <button
-                  className="float-right inline-flex items-center rounded px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
-                  onClick={handleAddSklClick}
+                  class="float-right inline-flex items-center rounded px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
+                  onClick={() => enableEditSkills()}
                 >
                   <svg
+                    class="h-6 w-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     fill="none"
                     viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
                     />
                   </svg>
                 </button>
@@ -392,35 +420,77 @@ function UserProfile() {
 
               <div className="grid md:grid-cols-3">
                 {userData?.skills?.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="md-1 grid rounded-lg border border-gray-200 bg-white shadow-sm md:mb-1 dark:border-gray-700 dark:bg-gray-800"
-                  >
-                    <div className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 font-sans text-xs font-bold uppercase text-white">
-                      <span>{skill.name}</span>
+                  <div key={index}>
+                    <div className="relative m-2 flex items-center justify-between whitespace-nowrap rounded-lg bg-gray-900 px-2 py-2 font-sans text-xs font-bold uppercase text-white">
+                      <p className="select-none">{skill.name}</p>
+                      {isSkillEditMode && (
+                        <button
+                          className="inline-flex items-center rounded px-2 py-1 font-bold text-red-600 hover:text-red-800"
+                          onClick={() => handleSkillEdit(index)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="size-3"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
+                {isSkillEditMode && (
+                  <button
+                    className="float-right inline-flex items-center rounded px-10 font-bold text-gray-800 hover:bg-gray-400 dark:text-white"
+                    onClick={handleAddSklClick}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
 
               <h6 className="text-sm font-bold text-gray-900 md:mb-2 dark:text-white">
                 Languages
                 <button
                   className="float-right inline-flex items-center rounded px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
-                  onClick={handleAddLngClick}
+                  onClick={enableEditLanguages}
                 >
                   <svg
+                    className="h-6 w-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     fill="none"
                     viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6"
                   >
                     <path
+                      stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      strokeWidth="2"
+                      d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
                     />
                   </svg>
                 </button>
@@ -432,34 +502,57 @@ function UserProfile() {
                     key={index}
                     className="md-1 grid rounded-lg border border-gray-200 bg-white shadow-sm md:mb-1 dark:border-gray-700 dark:bg-gray-800"
                   >
-                    <div className="relative grid select-none items-center whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 font-sans text-xs font-bold uppercase text-white">
+                    <div className="relative m-2 flex items-center justify-between whitespace-nowrap rounded-lg bg-gray-900 px-2 py-2 font-sans text-xs font-bold uppercase text-white">
                       <span>{language}</span>
+                      {isLanguageEditMode && (
+                        <button
+                          className="inline-flex items-center rounded px-2 py-1 font-bold text-red-600 hover:text-red-800"
+                          onClick={() => handleLanguageEdit(index)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="size-3"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
+                {isLanguageEditMode && (
+                  <button
+                    className="float-right inline-flex items-center rounded px-10 font-bold text-gray-800 hover:bg-gray-400 dark:text-white"
+                    onClick={handleAddLngClick}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
 
               <h6 className="mb-2 pt-5 text-sm font-bold text-gray-900 dark:text-white">
                 Links
-                <button
-                  className="float-right inline-flex items-center rounded px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
-                  onClick={handleAddLinkClick}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                </button>
               </h6>
               {userData?.links?.map((link, index) => (
                 <div key={index}>
@@ -509,6 +602,25 @@ function UserProfile() {
                   )}
                 </div>
               ))}
+              <button
+                className="float-right inline-flex items-center rounded px-40 py-2 font-bold text-gray-800 hover:bg-gray-400 dark:text-white"
+                onClick={handleAddLinkClick}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
